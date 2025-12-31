@@ -40,8 +40,7 @@ REST API для управления спутниками, ТВ-каналами
 - FastAPI  
 - SQLAlchemy  
 - Pydantic  
-- PostgreSQL  
-- Pytest  
+- PostgreSQL 
 
 ---
 
