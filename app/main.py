@@ -162,3 +162,10 @@ def delete_broadcast(broadcast_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"status": "deleted"}
 
+
+from .routers.tv_channels import router as tv_channels_router
+from .routers.broadcasts import router as broadcasts_router
+
+app.include_router(tv_channels_router)
+app.include_router(broadcasts_router)
+
