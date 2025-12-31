@@ -7,7 +7,6 @@ down_revision = None
 branch_labels = None
 depends_on = None
 
-
 def upgrade():
     op.add_column('satellites', sa.Column('launch_year', sa.Integer(), nullable=True))
     op.add_column('tv_channels', sa.Column('website', sa.String(length=255), nullable=True))

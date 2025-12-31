@@ -33,3 +33,4 @@ def downgrade() -> None:
         'ix_broadcasts_frequency',
         table_name='broadcasts'
     )
+
