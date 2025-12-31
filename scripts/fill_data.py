@@ -19,7 +19,7 @@ def safe_post(endpoint, payload):
     except Exception as e:
         print(f"Error at {endpoint}: {e}")
 
-# ====== Satellites ======
+#  Satellites
 print("Adding Satellites...")
 for i in tqdm(range(50), desc="Satellites"):
     payload = {
@@ -31,7 +31,7 @@ for i in tqdm(range(50), desc="Satellites"):
     safe_post("satellites", payload)
     time.sleep(TIMEOUT)
 
-# ====== TV Channels ======
+# TV Channels 
 print("Adding TV Channels...")
 for i in tqdm(range(200), desc="TV Channels"):
     payload = {
@@ -48,7 +48,7 @@ for i in tqdm(range(200), desc="TV Channels"):
     safe_post("tv-channels", payload)
     time.sleep(TIMEOUT)
 
-# ====== Broadcasts ======
+# Broadcasts 
 print("Adding Broadcasts...")
 for i in tqdm(range(1000), desc="Broadcasts"):
     payload = {

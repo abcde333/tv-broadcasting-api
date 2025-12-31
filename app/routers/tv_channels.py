@@ -10,6 +10,20 @@ router = APIRouter(
     tags=["TV Channels"]
 )
 
+# READ TVChannels WITH PAGINATION
+
+from fastapi import Query, HTTPException
+
+@router.get("/", response_model=list[schemas.TVChannelResponse])
+def list_tv_channels(
+    page: int = Query(1, gt=0, description="Page number must be > 0"),
+    limit: int = Query(20, gt=0, description="Limit must be > 0"),
+    db: Session = Depends(get_db)
+):
+    offset = (page - 1) * limit
+    return db.query(models.TVChannel).offset(offset).limit(limit).all()
+
+
 # CREATE
 @router.post("/", response_model=schemas.TVChannelResponse)
 def create_tv_channel(
@@ -24,14 +38,6 @@ def create_tv_channel(
     db.commit()
     db.refresh(db_channel)
     return db_channel
-
-# READ ALL
-@router.get("/", response_model=list[schemas.TVChannelResponse])
-def get_tv_channels(db: Session = Depends(get_db)):
-    """
-    Get a list of all TV channels
-    """
-    return db.query(models.TVChannel).all()
 
 # UPDATE BY ID
 @router.put("/{channel_id}", response_model=schemas.TVChannelResponse)
@@ -101,7 +107,7 @@ def low_rating_channels(db: Session = Depends(get_db)):
     Return channels with rating < 3 (from metadata_json).
     """
     channels = db.query(models.TVChannel).all()
-    
+
     low_rating = [
         {
             "id": c.id,
@@ -117,4 +123,20 @@ def low_rating_channels(db: Session = Depends(get_db)):
     ]
 
     return {"low_rating_channels": low_rating, "count": len(low_rating)}
+
+# REST API search (regex)
+@router.get("/search-metadata")
+def search_metadata(
+    q: str,
+    db: Session = Depends(get_db)
+):
+    return (
+        db.query(models.TVChannel)
+        .filter(
+            sa.text("metadata_json::text ~* :pattern")
+        )
+        .params(pattern=q)
+        .all()
+    )
+
 
